@@ -13,6 +13,22 @@ return new class extends Migration
     {
         Schema::create('users_messages', function (Blueprint $table) {
             $table->id();
+            $table->text('message');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->unsignedBigInteger('party_id');
+            $table->foreign('party_id')
+                ->references('id')
+                ->on('party')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            
             $table->timestamps();
         });
     }
