@@ -19,14 +19,14 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'surname' => fake()->surname(),
+            'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => encrypt("123456"),
-            'age' => fake()->age(), 
-            'direction' => fake()->direction(),
-            'phone' => fake()->phone(),
-            'role_id' => fake()->role_id(2),
+            'age' => rand(18,40), 
+            'direction' => fake()->address(),
+            'phone' => fake()->phoneNumber(),
+            'role_id' =>(2),
             'remember_token' => Str::random(30),
         ];
     }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
+    
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function parties()
+    {
+        return $this->belongsTo(Party::class);
+    }
 }
