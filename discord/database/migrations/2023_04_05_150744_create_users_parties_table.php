@@ -17,14 +17,14 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
-                ->on('user')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
             $table->unsignedBigInteger('party_id');
             $table->foreign('party_id')
                 ->references('id')
-                ->on('party')
+                ->on('parties')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             

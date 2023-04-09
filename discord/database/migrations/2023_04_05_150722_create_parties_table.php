@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable(false);
-            $table->string('rules');
+            $table->text('rules');
 
-            $table->unsignedBigInteger('game_id');
+            $table->unsignedBigInteger('game_id')->nullable();
             $table->foreign('game_id')
                 ->references('id')
                 ->on('games')
