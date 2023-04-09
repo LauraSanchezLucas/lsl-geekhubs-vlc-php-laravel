@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
                 "surname"=> "Sanchez",
                 "email"=> "laura@laura.com",
                 "password"=>encrypt("123456"),
-                "age"=> 37,
+                "age"=> "37",
                 "direction"=> "Mas camarena",
                 "phone"=> "+34675851486",
                 "role_id"=>1
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 "surname"=> "Bernabe",
                 "email"=> "alvaro@alvaro.com",
                 "password"=>encrypt("123456"),
-                "age"=> 35,
+                "age"=> "35",
                 "direction"=> "Valencia",
                 "phone"=> "+34675851246",
                 "role_id"=>2
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
                 "surname"=> "Martinez",
                 "email"=> "maria@maria.com",
                 "password"=>encrypt("123456"),
-                "age"=> 27,
+                "age"=> "27",
                 "direction"=> "Alicante",
                 "phone"=> "+34671551486",
                 "role_id"=>2
