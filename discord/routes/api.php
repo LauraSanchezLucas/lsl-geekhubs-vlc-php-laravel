@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,12 +23,22 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 // USER
-
-Route::middleware('auth:sanctum')->get('/profile', [UserController::class, 'profile']);
-Route::middleware('auth:sanctum')->put('/updateprofile/{id}', [UserController::class, 'updateProfile']);
+Route::group([
+    'middleware' => ['auth:sanctum']
+], function () {
+Route::get('/profile', [UserController::class, 'profile']);
+Route::put('/updateprofile/{id}', [UserController::class, 'updateProfile']);
+});
 
 // ADMIN
+Route::group([
+    'middleware' => ['auth:sanctum', 'isAdmin']
+], function () {
+Route::get('/getallusers', [UserController::class, 'getAllUsers']);
+Route::get('/getuserbyid/{id}', [UserController::class, 'getUserById']);
+Route::delete('/delete/{id}', [UserController::class, 'deleteProfile']);
+});
 
-Route::middleware('auth:sanctum','IsAdmin')->get('/getallusers', [UserController::class, 'getAllUsers']);
-Route::middleware('auth:sanctum','IsAdmin')->get('/getuserbyid/{id}', [UserController::class, 'getUserById']);
-Route::middleware('auth:sanctum','IsAdmin')->delete('/delete/{id}', [UserController::class, 'deleteProfile']);
+// MESSAGES
+Route::middleware('auth:sanctum', 'IsAdmin')->get('/getallmessages', [MessageController::class, 'getAllMessagesByAdmin']);
+// Route::middleware('auth:sanctum')->put('/updatemessage/{id}', [MessageController::class, 'updateMessage']);
