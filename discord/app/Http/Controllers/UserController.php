@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -29,7 +32,81 @@ class UserController extends Controller
             ], 500);
         }
     }
+
     
+
+    public function updateProfile(Request $request, $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'name' => 'string',
+                'surname' => 'string',
+                'age'=> 'string|min:1|max:2',
+                'direction'=> 'string',
+                'phone'=> 'string|max:15',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(
+                    [
+                        "success" => true,
+                        "message" => "User doesn't exists",
+                    ],
+                    404
+                );
+            }
+
+            $name = $request->input('name');
+            $surname = $request->input('surname');
+            $age = $request->input('age');
+            $direction = $request->input('direction');
+            $phone = $request->input('phone');
+
+            if (isset($name)) {
+                $user->name = $name;
+            }
+
+            if (isset($surname)) {
+                $user->surname = $surname;
+            }
+            if (isset($age)) {
+                $user->age = $age;
+            }
+            if (isset($direction)) {
+                $user->direction = $direction;
+            }
+            if (isset($phone)) {
+                $user->phone = $phone;
+            }
+
+            $user->save();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "User updated",
+                    "data" => $user
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            Log::error("Update Profile error: " . $th->getMessage());
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Update Profile error ". ($user)
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+        }
+
     // ADMIN
     public function getAllUsers()
     {

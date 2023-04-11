@@ -24,6 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 // USER
 
 Route::middleware('auth:sanctum')->get('/profile', [UserController::class, 'profile']);
+Route::middleware('auth:sanctum')->put('/updateprofile/{id}', [UserController::class, 'updateProfile']);
 
 // ADMIN
 
