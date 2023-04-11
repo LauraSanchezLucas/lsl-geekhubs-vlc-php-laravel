@@ -71,33 +71,33 @@ class UserController extends Controller
         }
     }
 
-    // public function deleteProfile($id)
-    // {
-    //     try {
+    public function deleteProfile($id)
+    {
+        try {
             
-    //         $user = User::find($id);
+            $user = User::find($id);
 
-    //         if ($user->role_id != 1) {
-    //             User::destroy($id);
+            if ($user->role_id != 1) {
+                User::destroy($id);
 
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'message' => 'User successfully deleted',
-    //             ], 200);
-    //         } else {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Admin profiles cannot be deleted'
-    //             ], 400);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error("Error deleting user: " . $th->getMessage());
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User successfully deleted',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Admin profiles cannot be deleted'
+                ], 400);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Error deleting user: " . $th->getMessage());
 
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'User could not be deleted'
-    //         ], 500);
-    //     }
-    // }
+            return response()->json([
+                'success' => true,
+                'message' => 'User could not be deleted'
+            ], 500);
+        }
+    }
 
 }
