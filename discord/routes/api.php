@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PartyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,5 +42,17 @@ Route::delete('/delete/{id}', [UserController::class, 'deleteProfile']);
 });
 
 // MESSAGES
-Route::middleware('auth:sanctum', 'IsAdmin')->get('/getallmessages', [MessageController::class, 'getAllMessagesByAdmin']);
+Route::middleware('auth:sanctum')->get('/getallmessages', [MessageController::class, 'getAllMessages']);
+Route::middleware('auth:sanctum')->get('/getmessagesbyparty/{id}', [MessageController::class, 'getMessagesByParty']);
+// Route::middleware('auth:sanctum')->get('/getallmessages', [MessageController::class, 'getAllMessages']);
 // Route::middleware('auth:sanctum')->put('/updatemessage/{id}', [MessageController::class, 'updateMessage']);
+Route::middleware('auth:sanctum')->post('/createmessage', [MessageController::class, 'createMessage']);
+
+
+// GAME
+Route::middleware('auth:sanctum', 'IsAdmin')->post('/creategame', [GameController::class, 'createGame']);
+
+// PARTY
+Route::middleware('auth:sanctum')->post('/createparty', [PartyController::class, 'createParty']);
+// Route::middleware('auth:sanctum')->post('/joinparty/{id}', [PartyController::class, 'joinParty']);
+Route::get('/party/{id}', [PartyController::class, 'getPartyByGame']);

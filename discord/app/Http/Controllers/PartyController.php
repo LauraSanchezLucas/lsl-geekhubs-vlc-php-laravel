@@ -2,27 +2,102 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Party;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PartyController extends Controller
 {
-    public function getParty()
+    public function createParty(Request $request)
     {
-        return "Get all users";
+        try {
+            $game_id = $request->input('game_id');
+            $name = $request->input('name');
+            $rules = $request->input('rules');
+
+            $newParty = new Party();
+            $newParty->game_id = $game_id;
+            $newParty->name = $name;
+            $newParty->rules = $rules;
+            $newParty->save();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Party Created",
+                    "data" => $newParty
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            Log::error("Creating party Error: " . $th->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Error creating party"
+                ],
+                500
+            );
+        }
     }
 
-    public function createParty()
+    // public function joinParty($id)
+    // {
+    //     try {
+
+    //         $user = auth()->user()->id;
+    //         $party = Party::query()->find($id);
+
+    //         if (!$party) {
+
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Party doesn´t exist'
+    //             ], 500);
+    //         }
+
+    //         $party_user = $party->user()->find($user);
+            
+    //          if ($party_user && $party) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'You already are in that party',
+    //             ]);
+    //         } else{
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'You join in a party',
+    //             ]);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error("Error joining party: " . $th->getMessage());
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Could not join party'
+    //         ], 500);
+    //     }
+    // }
+
+    public function getPartyByGame($id)
     {
-        return "Create user";
+        try {
+            
+            $parties = Party::where('game_id', $id)->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Parties found',
+                'data' => $parties
+            ]);
+        } catch (\Throwable $th) {
+            Log::error("Error getting parties: " . $th->getMessage());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Could not get parties'
+            ], 500);
+        }
     }
 
-    public function updateParty()
-    {
-        return "Update user";
-    }
-
-    public function deleteParty()
-    {
-        return "Delete user";
-    }
 }

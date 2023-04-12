@@ -3,17 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
-use function PHPUnit\Framework\isNull;
 
 class MessageController extends Controller
 {
-    public function getAllMessagesByAdmin()
+    public function createMessage(Request $request)
+    {
+        try {
+            $party_id = $request->input('party_id');
+            $user_id = auth()->user()->id;
+            $message = $request->input('message');
+
+            $newMessage = new Message();
+            $newMessage->party_id = $party_id;
+            $newMessage->user_id = $user_id;
+            $newMessage->message = $message;
+            $newMessage->save();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Message Created",
+                    "data" => $newMessage
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            Log::error("Creating message Error: " . $th->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Error creating Message"
+                ],
+                500
+            );
+        }
+    }
+    public function getAllMessages()
     {
         try {
             $messages = Message::query()->get();
@@ -33,60 +64,58 @@ class MessageController extends Controller
         }
     }
 
+    public function getMessagesByParty($id)
+    {
+        try {
+            $messages = Message::where('party_id', $id)->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Messages successfully retrieved',
+                'data' => $messages
+            ]);
+        } catch (\Throwable $th) {
+            Log::error("Error retrieving message: " . $th->getMessage());
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Messages could not be retrieved'
+            ], 500);
+        }
+    }
 
-
-
-
-
-
-
-
-    // public function updateMessage(Request $request){
+    // public function getMyMessages()
     // {
-    //         try {
-    //             $user = auth()->user()->id;
-    //             $user1 = DB::table('message')->where('id', '=', $user)->get();
-    //             $validator = Validator::make($request->all(), [
-    //                 'message' => 'string',
-    //             ]);
-    //             if ($validator->fails()) {
-    //                 return response()->json($validator->errors(), 400);
-    //             }
-    //             $newuser = Message::find($user);
-    //             if (!$user1) {
-    //                 return response()->json(
-    //                     [
-    //                         "success" => true,
-    //                         "message" => "Message doesn't exists",
-    //                     ],
-    //                     404
-    //                 );
-    //             }
-    //         $message = $request->input('message');
+    //     try {
+    //         $id = auth()->user()->id;
+    //         $myMessage = DB::table('messages')->where('user_id', '=', $id)->get();
             
-    //         if (isNull($message)) {
-    //             $newuser->message = $message;
-    //         }
-    //         $newuser->save();
+    //         $myMessage->party_id = $party_id;
+    //         $myMessage->user_id = $user_id;
+    //         $myMessage->message = $message;
+    //         $newMessage->save();
+
     //         return response()->json(
     //             [
     //                 "success" => true,
-    //                 "message" => "Message Updated Correctly",
-    //                 "data" => $message
+    //                 "message" => "Message deleted",
+    //                 "data" => [
+    //                     'id' => $myMessage->id,
+    //                     'user_id' => $myMessage->user_id,
+    //                     'message' => $myMessage->message,
+    //                     'party_id' => $myMessage->party_id,
+    //                 ]
     //             ],
     //             200
     //         );
-    //         } catch (\Throwable $th) {
-    //             Log::error("Update Message error: " . $th->getMessage());
-    //             return response()->json(
-    //                 [
-    //                     "success" => false,
-    //                     "message" => "Update Message error ". ($user)
-    //                 ],
-    //                 Response::HTTP_INTERNAL_SERVER_ERROR
-    //             );
-    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error("Error retrieving message: " . $th->getMessage());
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Messages could not be retrieved'
+    //         ], 500);
     //     }
     // }
+
+    
 }
