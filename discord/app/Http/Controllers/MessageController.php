@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -83,39 +84,104 @@ class MessageController extends Controller
         }
     }
 
-    // public function getMyMessages()
+    // public function deleteProfile($id)
     // {
     //     try {
-    //         $id = auth()->user()->id;
-    //         $myMessage = DB::table('messages')->where('user_id', '=', $id)->get();
             
-    //         $myMessage->party_id = $party_id;
-    //         $myMessage->user_id = $user_id;
-    //         $myMessage->message = $message;
-    //         $newMessage->save();
+    //         $user = User::find($id);
 
-    //         return response()->json(
-    //             [
-    //                 "success" => true,
-    //                 "message" => "Message deleted",
-    //                 "data" => [
-    //                     'id' => $myMessage->id,
-    //                     'user_id' => $myMessage->user_id,
-    //                     'message' => $myMessage->message,
-    //                     'party_id' => $myMessage->party_id,
-    //                 ]
-    //             ],
-    //             200
-    //         );
+    //         if ($user->role_id != 1) {
+    //             User::destroy($id);
+
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'User successfully deleted',
+    //             ], 200);
+    //         } else {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Admin profiles cannot be deleted'
+    //             ], 400);
+    //         }
     //     } catch (\Throwable $th) {
-    //         Log::error("Error retrieving message: " . $th->getMessage());
+    //         Log::error("Error deleting user: " . $th->getMessage());
 
     //         return response()->json([
     //             'success' => true,
-    //             'message' => 'Messages could not be retrieved'
+    //             'message' => 'User could not be deleted'
     //         ], 500);
     //     }
     // }
+    // public function deleteUserByAdmin($id){
+    //     try {
+    //         User::destroy($id);
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'User deleted'
+    //         ],200);
+    //     } catch (\Throwable $th){
+    //         return response()->json([ 
+    //             'success' => false,
+    //             'message' => $th->getMessage()],500);
+    //     }  
+    // }
+    // public function deleteMessage($id)
+    // {
+    //     try {
+    //         $userId = auth()->user()->id;
+    //         $user = User::find($userId);
+    //         $party = Message::where('user_id', $userId)->select('party_id')->first();
+    //         $userParty = $user->party()->wherePivot('user_id', $userId)->wherePivot('active', true)->wherePivot('party_id', $party->party_id)->first();
+
+    //         $isMine = Message::where('user_id', $userId)->find($id);
+    //         if ($isMine && $userParty) {
+    //             Message::where('id', $id)->delete();
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'Message deleted'
+    //             ]);
+    //         } else {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'You cannot delete that message'
+    //             ], 500);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error("Error deleting message: " . $th->getMessage());
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Could not delete message'
+    //         ], 500);
+    //     }
+    // }
+    public function deleteMessage(Request $request, $id)
+    {
+        try {
+
+            Message::destroy($id);
+
+            // otra manera de hacerlo
+            // Pizza::query()->where('id', $id)->where('is_active', 0)->delete();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Message deleted"
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => $th->getMessage()
+                ],
+                500
+            );
+        }
+    }
 
     
 }

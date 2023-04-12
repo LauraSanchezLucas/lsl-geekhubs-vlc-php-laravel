@@ -34,7 +34,7 @@ Route::put('/updateprofile/{id}', [UserController::class, 'updateProfile']);
 
 // ADMIN
 Route::group([
-    'middleware' => ['auth:sanctum', 'isAdmin']
+    'middleware' => ['auth:sanctum', 'IsAdmin']
 ], function () {
 Route::get('/getallusers', [UserController::class, 'getAllUsers']);
 Route::get('/getuserbyid/{id}', [UserController::class, 'getUserById']);
@@ -44,9 +44,8 @@ Route::delete('/delete/{id}', [UserController::class, 'deleteProfile']);
 // MESSAGES
 Route::middleware('auth:sanctum')->get('/getallmessages', [MessageController::class, 'getAllMessages']);
 Route::middleware('auth:sanctum')->get('/getmessagesbyparty/{id}', [MessageController::class, 'getMessagesByParty']);
-// Route::middleware('auth:sanctum')->get('/getallmessages', [MessageController::class, 'getAllMessages']);
-// Route::middleware('auth:sanctum')->put('/updatemessage/{id}', [MessageController::class, 'updateMessage']);
 Route::middleware('auth:sanctum')->post('/createmessage', [MessageController::class, 'createMessage']);
+Route::middleware('auth:sanctum','IsAdmin')->delete('/deletemessage/{id}', [MessageController::class, 'deleteMessage']);
 
 
 // GAME
@@ -54,5 +53,4 @@ Route::middleware('auth:sanctum', 'IsAdmin')->post('/creategame', [GameControlle
 
 // PARTY
 Route::middleware('auth:sanctum')->post('/createparty', [PartyController::class, 'createParty']);
-// Route::middleware('auth:sanctum')->post('/joinparty/{id}', [PartyController::class, 'joinParty']);
 Route::get('/party/{id}', [PartyController::class, 'getPartyByGame']);
