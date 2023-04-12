@@ -42,44 +42,6 @@ class PartyController extends Controller
         }
     }
 
-    // public function joinParty($id)
-    // {
-    //     try {
-
-    //         $user = auth()->user()->id;
-    //         $party = Party::query()->find($id);
-
-    //         if (!$party) {
-
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Party doesn´t exist'
-    //             ], 500);
-    //         }
-
-    //         $party_user = $party->user()->find($user);
-            
-    //          if ($party_user && $party) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'You already are in that party',
-    //             ]);
-    //         } else{
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'message' => 'You join in a party',
-    //             ]);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error("Error joining party: " . $th->getMessage());
-
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Could not join party'
-    //         ], 500);
-    //     }
-    // }
-
     public function getPartyByGame($id)
     {
         try {
@@ -99,5 +61,46 @@ class PartyController extends Controller
             ], 500);
         }
     }
+
+    // public function joinPartyById($id)
+    // {
+    //     try {
+    //         $userId = auth()->user()->id;
+    //         $party = Party::find($id);
+    //         if (!$party) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Party does not exist'
+    //             ], 500);
+    //         }
+    //         $active = $party->user()->find($userId);
+    //         $existing = $party->user()->find($userId);
+    //          if ($active && $party) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'You already are in that party',
+    //             ]);
+    //         } else if ($existing && $party) {
+    //             $party->user()->updateExistingPivot($userId, ['owner' => false, 'active' => true]);
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'Party re-joined',
+    //             ]);
+    //         } else {
+    //             $party->user()->attach($userId, ['owner' => false, 'active' => true]);
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'Party joined',
+    //             ]);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error("Error joining party: " . $th->getMessage());
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Could not join party'
+    //         ], 500);
+    //     }
+    // }
 
 }
