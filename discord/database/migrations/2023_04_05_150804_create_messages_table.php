@@ -28,7 +28,7 @@ return new class extends Migration
                 ->on('parties')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }

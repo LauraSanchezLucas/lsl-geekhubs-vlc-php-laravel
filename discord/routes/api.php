@@ -42,17 +42,23 @@ Route::delete('/delete/{id}', [UserController::class, 'deleteProfile']);
 });
 
 // MESSAGES
-Route::middleware('auth:sanctum')->get('/getallmessages', [MessageController::class, 'getAllMessages']);
-Route::middleware('auth:sanctum')->get('/getmessagesbyparty/{id}', [MessageController::class, 'getMessagesByParty']);
-Route::middleware('auth:sanctum')->post('/createmessage', [MessageController::class, 'createMessage']);
-Route::middleware('auth:sanctum','IsAdmin')->delete('/deletemessage/{id}', [MessageController::class, 'deleteMessage']);
-Route::middleware('auth:sanctum','IsAdmin')->put('/updatemessage/{id}', [MessageController::class, 'updateMessage']);
-
-
+Route::group([
+    'middleware' => ['auth:sanctum']
+], function () {
+Route::get('/getallmessages', [MessageController::class, 'getAllMessages']);
+Route::get('/getmessagesbyparty/{id}', [MessageController::class, 'getMessagesByParty']);
+Route::post('/createmessage', [MessageController::class, 'createMessage']);
+});
+Route::group([
+    'middleware' => ['auth:sanctum', 'IsAdmin']
+], function () {
+Route::delete('/deletemessage/{id}', [MessageController::class, 'deleteMessage']);
+Route::put('/updatemessage/{id}', [MessageController::class, 'updateMessage']);
+});
 // GAME
 Route::middleware('auth:sanctum', 'IsAdmin')->post('/creategame', [GameController::class, 'createGame']);
 
 // PARTY
 Route::middleware('auth:sanctum')->post('/createparty', [PartyController::class, 'createParty']);
 Route::get('/party/{id}', [PartyController::class, 'getPartyByGame']);
-Route::middleware('auth:sanctum')->post('/join/{id}',[PartyController::class, 'joinPartyById']);
+
