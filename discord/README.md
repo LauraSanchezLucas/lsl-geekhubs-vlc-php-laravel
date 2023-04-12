@@ -1,66 +1,236 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# lsl-geeks-# Welcome to my backend app laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<p align="center"><img src="./discord/assets/laravel.png"/></p>
+
+<details>
+  <summary>Contenido 📝</summary>
+  <ol>
+    <li><a href="#sobre-el-proyecto">Sobre el proyecto</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#diagrama-bd">Diagrama</a></li>
+    <li><a href="#instalación-en-local">Instalación</a></li>
+    <li><a href="#endpoints">Endpoints</a></li>
+    <li><a href="#futuras-funcionalidades">Futuras funcionalidades</a></li>
+    <li><a href="#contribuciones">Contribuciones</a></li>
+    <li><a href="#licencia">Licencia</a></li>
+    <li><a href="#agradecimientos">Agradecimientos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ol>
+</details>
+
+## Sobre el proyecto
+El departamento de productos de GeeksHubs nos solicita crear el backend correspondiente a una aplicación web LFG, que
+permita que los empleados puedan contactar con otros compañeros para formar grupos para jugar a un videojuego, con el objetivo de poder compartir un rato de ocio afterwork, un tipo de discord. Se creará una base de datos y una API REST. El usuario debe poder registrarse en la aplicación, iniciar sesión y acceder a su área de cliente. En su área de cliente debe poder ver los juegos que hay disponibles, crear y ver los mensajes en el canal ademas de unirse a cualquier canal o abandonarlo. También habrá un área de admin en el que puede crear juegos, borrar mensajes y borrar a cualquier usuario.     
+
+
+## Stack
+Tecnologías utilizadas:
+<div align="center">
+  <a href="https://git-scm.com/">
+        <img src= "https://img.shields.io/badge/git-F54D27?style=for-the-badge&logo=git&logoColor=white"/>
+    </a>
+    <a href="https://www.github.com/">
+        <img src= "https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white"/>
+    </a>
+    <a href="https://www.mysql.com/">
+        <img src= "https://img.shields.io/badge/mysql-3E6E93?style=for-the-badge&logo=mysql&logoColor=white"/>
+    </a>
+     <a href="https://www.php.net/">
+        <img src= "https://img.shields.io/badge/php-7A86B8?style=for-the-badge&logo=php&logoColor=black"/>
+    </a>
+     <a href="https://laravel.com/">
+        <img src= "https://img.shields.io/badge/laravel-F13C2F?style=for-the-badge&logo=laravel&logoColor=white"/>
+    </a>
+<a href="https://developer.mozilla.org/es/docs/Web/JavaScript">
+    <img src= "https://img.shields.io/badge/javascipt-EFD81D?style=for-the-badge&logo=javascript&logoColor=black"/>
+</a>
+ </div>
+
+
+## Diagrama BD
+!['imagen-db'](./discord/assets/bbdd.png)
+
+## Instalación en local
+1. Clonar el repositorio
+2. ` $ composer install `
+3. Conectamos nuestro repositorio con la base de datos 
+4. ``` $ php artisan serve ``` 
+   
+   Ahora ya pudes empezar a enviar peticiones....
+
+## Endpoints
+<details>
+<summary>Endpoints</summary>
+
+Cualquier usuario puede acceder:
+
+- AUTH (Autentificacion)
+    - REGISTRO
+            POST localhost:8000/api/register
+        body:
+        ``` js
+            {
+                "name": "Juan",
+                "surname": "Lucas",
+                "email": "juan@juan.com",
+                "password": "123456",
+                "age": "37",
+                "direction": "Jaen",
+                "phone": "+34607854148"
+            }
+        ```
+    La contraseña es encriptada usando bcrypt, nativo de laravel y despues es enviada a la base de datos.
+
+    - LOGIN
+
+            POST localhost:8000/api/login 
+        body:
+        ``` js
+            {
+              "email": "alvaro@alvaro.com",
+              "password": "123456"
+            }
+        ```
+    - VER MY PERFIL:
+
+            GET  localhost:8000/api/profile
+        
+    - ACTUALIZAR MI PERFIL:
+
+            PUT  localhost:8000/api/updateprofile/{id}
+         body:
+        ``` js
+            {
+                "name": "Isabel",
+                "surname": "Bernabe",
+                "age": "30",
+                "direction": "Asturias",
+                "phone": "+341687224"
+            }
+        ```
+    - CREAR UN MENSAJE:
+
+            POST  localhost:8000/api/createmessage
+         body:
+        ``` js
+            {
+                "party_id": "2",
+                "message": "Los personajes...."
+            }
+        ```
+    - VER TODOS LOS MENSAJES:
+
+            GET  localhost:8000/api/getallmessages
+    
+    - VER LOS MENSAJES DE UN JUEGO:
+
+            GET  localhost:8000/api/getmessagesbyparty/{id}
+         
+    - CREAR UN CANAL:
+
+            POST  localhost:8000/api/createparty
+          body:
+        ``` js
+            {
+                "game_id": "2",
+                "name": "Tetris",
+                "rules": "Respetar al resto...."
+            }
+        ```
+     - VER LOS CANALES DE UN JUEGO:
+
+            GET  localhost:8000/api/party/{id}
+         
+Ademas como admin puedes:
+
+    - VER TODOS LOS USUARIOS REGISTRADOS:
+
+            GET  localhost:8000/api/getallusers
+    
+     - VER UN USUARIO EN CONCRETO:
+
+            GET  localhost:8000/api/getuserbyid/{id}
+
+    - BORRAR UN USUARIO:
+
+            DELETE  localhost:8000/api/delete/{id}
+
+     - BORRAR UN MENSAGE:
+
+            DELETE  localhost:8000/api/deletemessage/{id}
+         
+    - MODIFICAR UN MENSAGE:
+
+            PUT  localhost:8000/api/updatemessage/{id}
+
+         body:
+        ``` js
+            {
+                "message": "holaaaaa"
+            }
+        ```
+    - CREAR UN MENSAGE:
+
+            POST  localhost:8000/api/creategame
+
+         body:
+        ``` js
+            {
+                "name": "Muchos",
+                "platform": "pc",
+                "party_id": "2"
+            }
+        ```
+## Futuras funcionalidades
+Como futuras funcionalidades me gustaria añadir para que fuera mas completa mi aplicación las siguientes:
+    - Ver solo mis mensajes como un usuario.
+    - Poder modificar mi mensaje como usuario.
+    - Poder borrar mis propios mensajes sin tener que ser admin.
+    - Ver en los canales en los que he participado.
+    - Entrar y salir de un canal.
+
+## Contribuciones
+Las sugerencias y aportaciones son siempre bienvenidas.  
+
+Puedes hacerlo de dos maneras:
+
+1. Abriendo una issue
+2. Crea un fork del repositorio
+    - Crea una nueva rama  
+        ```
+        $ git checkout -b feature/nombreUsuario-mejora
+        ```
+    - Haz un commit con tus cambios 
+        ```
+        $ git commit -m 'feat: mejora X cosa'
+        ```
+    - Haz push a la rama 
+        ```
+        $ git push origin feature/nombreUsuario-mejora
+        ```
+    - Abre una solicitud de Pull Request
+
+## Licencia
+Este proyecto se encuentra bajo licencia de "Creative Commons Zero".
+
+
+## Agradecimientos:
+
+Agradezco a mis compañeros el tiempo dedicado a este proyecto:
+
+ **Dani**  
+<a href="https://www.github.com/datata" target="_blank"><img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=green" target="_blank"></a> 
+
+  **Jose**
+<a href="https://github.com/JoseMarin" target="_blank"><img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a> 
+
+  **Mara**
+<a href="https://www.github.com/MaraScampini" target="_blank"><img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=green" target="_blank"></a> 
+
+  **David**  
+<a href="https://github.com/Dave86dev" target="_blank"><img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red" target="_blank"></a> 
+
+## Contacto
+<a href = "Laura:lausnclu@gmail.com"><img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+<a href="https://www.linkedin.com/in/laura-sanchez-lucas-5b2222251/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
 </p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
