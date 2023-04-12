@@ -1,6 +1,5 @@
 # lsl-geeks-# Welcome to my backend app laravel
-
-<p align="center"><img src="../lsl-geekhubs-vlc-php-laravel/discord/assets/laravel.png"/></p>
+!['imagen-laravel'](./discord/assets/laravel.png)
 
 <details>
   <summary>Contenido 📝</summary>
